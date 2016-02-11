@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Include mutliflash library
+libraryDirectory="$(realpath "$(dirname "$0")")"
+source "$libraryDirectory/multiflash.lib.sh"
+
+showUsage() {
+  cat << EOF
+Usage:
+$programName [-m <message>] [-i <interface-ip-range>] [-t <interval-time-in-seconds>] [-g <multicast-group-ip>] [-p <multicast-group-port>]
+EOF
+}
+
+showOptions() {
+  cat << EOF
+Sending with:
+$programName -m '$message' -i '$networkIpRange' -t '$timeIntervalInSeconds' -g '$multicastGroupIp' -p '$multicastGroupPort'
+EOF
+}
+
+# IPv4
+networkIpRange="$networkIp/32"
+
+while getopts ":m:i:t:g:p:" option; do
+  case $option in
+  m) message="$OPTARG" ;;
+  i) networkIpRange="$OPTARG" ;;
+  t) timeIntervalInSeconds="$OPTARG" ;;
+  g) multicastGroupIp="$OPTARG" ;;
+  p) multicastGroupPort="$OPTARG" ;;
+  ?)
+    echo "Invalid option: '$OPTARG'"
+    showUsage
+    exit 1
+    ;;
+  esac
+done
+showOptions
+command="socat STDIO UDP4-DATAGRAM:$multicastGroupIp:$multicastGroupPort,range=$networkIpRange"
+echo "$command"
+exit 0
