@@ -23,7 +23,7 @@ defaultInterface="eth0"
 message="multiflash-debug"
 networkIp=`getNetworkIp $defaultInterface`
 networkIp6=`getNetworkIp6 $defaultInterface`
-timeIntervalInSeconds=1
+timeIntervalInSeconds="1"
 multicastGroupIp="226.1.3.14"
 multicastGroupPort="31415"
 

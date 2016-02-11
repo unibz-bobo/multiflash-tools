@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Include mutliflash library
+# Include multiflash library
 libraryDirectory="$(realpath "$(dirname "$0")")"
 source "$libraryDirectory/multiflash.lib.sh"
 
@@ -36,6 +36,8 @@ while getopts ":m:i:t:g:p:" option; do
   esac
 done
 showOptions
-command="socat STDIO UDP4-DATAGRAM:$multicastGroupIp:$multicastGroupPort,range=$networkIpRange"
-echo "$command"
+while sleep $timeIntervalInSeconds; do
+  trap "exit 0" INT
+  echo "$message" | socat STDIO UDP4-DATAGRAM:$multicastGroupIp:$multicastGroupPort,range=$networkIpRange
+done
 exit 0
